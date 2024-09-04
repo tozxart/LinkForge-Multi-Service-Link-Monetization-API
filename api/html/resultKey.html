@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Link Generation Result</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f0f0f0;
+      }
+      .result-container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+      h1 {
+        color: #333;
+      }
+      #resultKey {
+        font-size: 18px;
+        margin-top: 20px;
+        word-break: break-all;
+        padding: 10px;
+        background-color: #f5f5f5;
+        border-radius: 4px;
+      }
+      #copyButton {
+        margin-top: 10px;
+        padding: 8px 16px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      #copyButton:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="result-container">
+      <h1>Your Generated Key</h1>
+      <div id="resultKey"></div>
+      <button id="copyButton">Copy Key</button>
+    </div>
+    <script>
+      document.getElementById("resultKey").textContent = "${userKey}";
+      const copyButton = document.getElementById("copyButton");
+      const resultKey = document.getElementById("resultKey");
+
+      copyButton.addEventListener("click", () => {
+        navigator.clipboard.writeText(resultKey.textContent).then(() => {
+          copyButton.textContent = "Copied!";
+          setTimeout(() => {
+            copyButton.textContent = "Copy Key";
+          }, 2000);
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Link Generator</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+      .container {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        text-align: center;
+      }
+      h1 {
+        color: #333;
+        margin-bottom: 1.5rem;
+      }
+      .button-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      button {
+        background-color: #007bff;
+        border: none;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Select Your Link Generation Method</h1>
+      <div class="button-container">
+        <form action="/link/create-with-type" method="POST">
+          <button type="submit" name="type" value="linkvertise">
+            Linkvertise
+          </button>
+          <button type="submit" name="type" value="lootlabs">LootLabs</button>
+          <button type="submit" name="type" value="chained">
+            Chained Links
+          </button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
