@@ -1,36 +1,29 @@
-const { Schema, model } = require("mongoose");
+const mongoose = require("mongoose");
 
-const keySchema = new Schema(
-  {
-    id: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    value: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    type: {
-      type: String,
-      required: true,
-    },
-    subscriptionType: {
-      type: String,
-      required: false,
-    },
-    // gameId and adIds property are only valid for "type" of "free"
-    gameId: {
-      type: String,
-      required: false,
-    },
-    adIds: {
-      type: Array,
-      default: [],
-    },
+const keySchema = new mongoose.Schema({
+  id: {
+    type: String,
+    required: true,
+    unique: true,
   },
-  { timestamps: true }
-);
+  value: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  type: {
+    type: String,
+    required: true,
+    enum: ["free", "paid"],
+  },
+  duration: {
+    type: Number,
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
 
-module.exports = model("key", keySchema);
+module.exports = mongoose.model("Key", keySchema);

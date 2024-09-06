@@ -197,6 +197,7 @@ async function createAndSaveNewKey() {
     id: randomUUID(),
     type: "free",
     value: randomString(12),
+    duration: 24 * 60 * 60 * 1000, // 24 hours in milliseconds for free keys
   });
   await newKey.save();
   return newKey;

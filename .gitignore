@@ -2,3 +2,6 @@ node_modules
 populateFakeUsers.js
 yarn.lock
 package-lock.json
+.env
+combined.log
+error.log

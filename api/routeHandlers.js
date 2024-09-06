@@ -1,16 +1,14 @@
 const express = require("express");
 const rateLimit = require("express-rate-limit");
-
 const asyncHandler = require("express-async-handler");
 const { sendSpamWebhook } = require("../cron/discordWebhookSender.js");
-const linkvertiseHandler = require("./linkvertise.js");
-const lootlabsHandler = require("./lootlabs.js");
-const chainedLinksHandler = require("./chainedLinks.js");
 const path = require("path");
 const fs = require("fs").promises;
-const Key = require("../models/Key"); // Make sure to import the Key model
-
+const Key = require("../models/Key");
 const router = express.Router();
+const adminRoutes = require("./adminRoutes");
+const logger = require("../utils/logger");
+const linkRoutes = require("./routes/linkRoutes");
 
 const getIpAddress = (req) => {
   return (
@@ -22,8 +20,8 @@ const getIpAddress = (req) => {
 };
 
 const limiter = rateLimit({
-  windowMs: 60 * 1000, // 1 minute
-  max: 10, // Limit each IP to 10 requests per windowMs
+  windowMs: 60 * 1000,
+  max: 10,
   message: "Too many requests from this IP, please try again later.",
   handler: async (req, res, options) => {
     const details = {
@@ -38,22 +36,41 @@ const limiter = rateLimit({
   },
 });
 
-router.use(limiter);
+// Use admin routes before applying the rate limiter
+router.use("/admin", adminRoutes);
+
+// Apply rate limiter to all routes except admin routes
+router.use((req, res, next) => {
+  if (req.path.startsWith("/admin")) {
+    return next();
+  }
+  limiter(req, res, next);
+});
+
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
+
+// Use link routes
+router.use("/link", linkRoutes);
 
 router.get(
   "/link/create",
   asyncHandler(async (req, res) => {
-    const htmlFilePath = path.join(__dirname, "html", "GenerateLinks.html");
+    const htmlFilePath = path.join(
+      __dirname,
+      "..",
+      "public",
+      "html",
+      "GenerateLinks.html"
+    );
     let htmlContent = await fs.readFile(htmlFilePath, "utf8");
     res.send(htmlContent);
   })
 );
 
 const createLinkLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 20, // Limit each IP to 20 link creations per window
+  windowMs: 15 * 60 * 1000,
+  max: 20,
   message: "Too many links created from this IP, please try again later.",
 });
 
@@ -61,54 +78,9 @@ router.post(
   "/link/create-with-type",
   createLinkLimiter,
   asyncHandler(async (req, res) => {
-    const type = req.body.type;
-    const handlers = {
-      linkvertise: linkvertiseHandler,
-      lootlabs: lootlabsHandler,
-      chained: chainedLinksHandler,
-    };
-
-    const handler = handlers[type];
-    if (handler) {
-      await handler.createWithType(req, res);
-    } else {
-      res.redirect(`${process.env.BASE_URL}/link/create`);
-    }
+    const { type } = req.body;
+    res.redirect(307, `/link/${type}/create-with-type`);
   })
-);
-
-router.get(
-  "/link/:type/:checkoutKey",
-  asyncHandler(async (req, res) => {
-    const { type, checkoutKey } = req.params;
-    const handlers = {
-      linkvertise: linkvertiseHandler,
-      lootlabs: lootlabsHandler,
-      chained: chainedLinksHandler,
-    };
-
-    const handler = handlers[type];
-    if (handler) {
-      await handler.checkoutKey(req, res);
-    } else {
-      res.redirect(`${process.env.BASE_URL}/link/create`);
-    }
-  })
-);
-
-router.get(
-  "/link/chained/active-count",
-  asyncHandler(chainedLinksHandler.getActiveLinksCount)
-);
-
-router.post(
-  "/link/chained/delete-all",
-  asyncHandler(chainedLinksHandler.deleteAllLinks)
-);
-
-router.get(
-  "/link/chained/analytics",
-  asyncHandler(chainedLinksHandler.getAnalytics)
 );
 
 router.get(

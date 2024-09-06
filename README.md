@@ -1,5 +1,7 @@
 # LinkForge: Multi-Service Link Monetization API
 
+![LinkForge Dashboard Demo](dashboard.gif)
+
 LinkForge is a versatile Node.js API that integrates multiple link monetization services, including Linkvertise and LootLabs, to help content creators and developers generate revenue through link shortening and content locking.
 
 ## Features
@@ -14,6 +16,8 @@ LinkForge is a versatile Node.js API that integrates multiple link monetization 
 - Key generation and management system
 - Express.js-based API with modular architecture
 - Key validation endpoint
+- Admin dashboard with Discord OAuth2 authentication
+- Advanced key management features (create, delete, add time, search)
 
 ## Getting Started
 
@@ -39,7 +43,14 @@ LinkForge is a versatile Node.js API that integrates multiple link monetization 
 3. Set up environment variables:
 
    - Rename `.env.example` to `.env`
-   - Fill in the required credentials and settings
+   - Fill in the required credentials and settings, including:
+     - API configuration
+     - MongoDB URI
+     - Linkvertise and LootLabs API tokens
+     - JWT secret
+     - Discord OAuth2 credentials
+     - Allowed Discord user IDs for admin access
+     - Base URL and webhook URLs
 
 4. Start the server:
    ```bash
@@ -54,6 +65,26 @@ The API provides several endpoints for creating and managing monetized links:
 - `/link/create-with-type`: Creates a new monetized link
 - `/link/:type/:checkoutKey`: Handles link redirection and key generation
 - `/key/validate/:key`: Validates a generated key
+
+### Admin Dashboard
+
+Access the admin dashboard at `/admin/login`. Use Discord OAuth2 to log in with an authorized Discord account.
+
+Features:
+
+- View all generated keys
+- Create new keys (free or paid)
+- Delete keys
+- Add time to existing keys
+- Filter and search keys
+
+### Key Management
+
+The system now supports advanced key management:
+
+- Free keys expire after 24 hours
+- Paid keys have customizable durations
+- Admins can add time to existing keys
 
 ### Key Validation
 

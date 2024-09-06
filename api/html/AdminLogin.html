@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Login</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f0f0f0;
+      }
+      .login-container {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        margin-top: 0;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+      input {
+        margin-bottom: 1rem;
+        padding: 0.5rem;
+      }
+      button {
+        padding: 0.5rem;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      .discord-btn {
+        background-color: #7289da;
+        color: white;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .discord-btn:hover {
+        background-color: #5f73bc;
+      }
+      .discord-icon {
+        margin-right: 10px;
+        font-size: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-container">
+      <h1>Admin Login</h1>
+      <button id="discordLoginBtn" class="discord-btn">
+        <i class="fa-brands fa-discord discord-icon"></i>
+        Login with Discord
+      </button>
+    </div>
+    <script>
+      document
+        .getElementById("discordLoginBtn")
+        .addEventListener("click", () => {
+          window.location.href = "/admin/auth/discord";
+        });
+    </script>
+  </body>
+</html>
