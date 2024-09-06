@@ -53,18 +53,23 @@ router.use(express.json());
 // Use link routes
 router.use("/link", linkRoutes);
 
+async function handleCreateLink(req, res) {
+  try {
+    const htmlPath = path.join(__dirname, "html", "GenerateLinks.html");
+    const html = await fs.readFile(htmlPath, "utf8");
+    res.send(html);
+  } catch (error) {
+    console.error("Error reading GenerateLinks.html:", error);
+    res
+      .status(500)
+      .send("Error generating link page. Please check server logs.");
+  }
+}
+
 router.get(
   "/link/create",
   asyncHandler(async (req, res) => {
-    const htmlFilePath = path.join(
-      __dirname,
-      "..",
-      "public",
-      "html",
-      "GenerateLinks.html"
-    );
-    let htmlContent = await fs.readFile(htmlFilePath, "utf8");
-    res.send(htmlContent);
+    handleCreateLink(req, res);
   })
 );
 
